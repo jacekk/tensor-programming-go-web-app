@@ -1,0 +1,18 @@
+<h1>{{ .Title }} | edit</h1>
+
+<p>
+	[<a href="/show/{{ .Title }}">
+		show
+	</a>]
+</p>
+
+
+<form action="/save/{{ .Title }}" method="post">
+	<div>
+		<textarea name="body" cols="80" rows="15">{{ printf "%s" .Body }}</textarea>
+	</div>
+	<br>
+	<div>
+		<input type="submit" value="Submit" />
+	</div>
+</form>
