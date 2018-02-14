@@ -7,12 +7,19 @@ import (
 	"net/http"
 )
 
-const HTTP_PORT = 8000
+// HTTPPort ...
+const HTTPPort = 8000
 
-const ROUTE_SHOW = "/show/"
-const ROUTE_EDIT = "/edit/"
-const ROUTE_SAVE = "/save/"
+// RouteShow ...
+const RouteShow = "/show/"
 
+// RouteEdit ...
+const RouteEdit = "/edit/"
+
+// RouteSave ...
+const RouteSave = "/save/"
+
+// Page ...
 type Page struct {
 	Title string
 	Body  []byte
@@ -42,7 +49,7 @@ func loadPage(title string) (*Page, error) {
 }
 
 func viewPage(res http.ResponseWriter, req *http.Request) {
-	title := req.URL.Path[len(ROUTE_SHOW):]
+	title := req.URL.Path[len(RouteShow):]
 	fmt.Printf("Showing `%s` page...\n", title)
 	page, err := loadPage(title)
 
@@ -56,7 +63,7 @@ func viewPage(res http.ResponseWriter, req *http.Request) {
 }
 
 func editPage(res http.ResponseWriter, req *http.Request) {
-	title := req.URL.Path[len(ROUTE_EDIT):]
+	title := req.URL.Path[len(RouteEdit):]
 	fmt.Printf("Showing `%s` edit page...\n", title)
 	page, err := loadPage(title)
 
@@ -70,19 +77,19 @@ func editPage(res http.ResponseWriter, req *http.Request) {
 }
 
 func savePage(res http.ResponseWriter, req *http.Request) {
-	title := req.URL.Path[len(ROUTE_SAVE):]
+	title := req.URL.Path[len(RouteSave):]
 	body := req.FormValue("body")
 	fmt.Printf("Saving `%s` page...\n", title)
 	p := &Page{Title: title, Body: []byte(body)}
 	p.save()
-	redirectTo := fmt.Sprintf("%s%s", ROUTE_SHOW, title)
+	redirectTo := fmt.Sprintf("%s%s", RouteShow, title)
 	http.Redirect(res, req, redirectTo, http.StatusFound)
 }
 
 func main() {
-	http.HandleFunc(ROUTE_SHOW, viewPage)
-	http.HandleFunc(ROUTE_EDIT, editPage)
-	http.HandleFunc(ROUTE_SAVE, savePage)
-	fmt.Println(fmt.Sprintf("Listening on http://localhost:%d", HTTP_PORT))
-	http.ListenAndServe(fmt.Sprintf(":%d", HTTP_PORT), nil)
+	http.HandleFunc(RouteShow, viewPage)
+	http.HandleFunc(RouteEdit, editPage)
+	http.HandleFunc(RouteSave, savePage)
+	fmt.Println(fmt.Sprintf("Listening on http://localhost:%d", HTTPPort))
+	http.ListenAndServe(fmt.Sprintf(":%d", HTTPPort), nil)
 }
